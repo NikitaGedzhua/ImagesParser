@@ -17,6 +17,7 @@ public class Parser : MonoBehaviour
 
     private readonly List<Image> _imagesFromSite = new();
     private List<string> _imagesUrlsList = new();
+    private string _path;
 
     private void Awake()
     {
@@ -52,6 +53,7 @@ public class Parser : MonoBehaviour
             .Where(s => !String.IsNullOrEmpty(s));
 
         _imagesUrlsList = urls.ToList();
+        
 
         textCount.text = urls.Count().ToString();
 
@@ -68,8 +70,11 @@ public class Parser : MonoBehaviour
         for (int i = 0; i < _imagesFromSite.Count; i++)
         {
             var i1 = i;
+
+            _path = _imagesUrlsList[i].StartsWith("https") ? "" + _imagesUrlsList[i] : "https:" + _imagesUrlsList[i];
+
             Davinci.get().
-                load(_imagesUrlsList[i]).
+                load(_path).
                 into(_imagesFromSite[i1]).
                 withErrorAction(s => textResult.text = s).
                 withDownloadedAction(() => textResult.text ="Success").
